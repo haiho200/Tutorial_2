@@ -26,7 +26,26 @@ $('clear-led').onclick=()=>{render(Array.from({length:64},()=>[0,0,0]));worker.p
 let lastExample='heart';$('examples').onchange=e=>{if($('code').value!==examples[lastExample]&&!confirm('Replace your edited code with this example? Save it first if you need a copy.')){e.target.value=lastExample;return}lastExample=e.target.value;$('code').value=examples[lastExample]};
 $('download').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([$('code').value],{type:'text/x-python'}));a.download='main.py';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
 $('upload').onchange=async e=>{const f=e.target.files[0];if(f){if(f.size>1000000){log('Please open a Python file smaller than 1 MB.');return}if($('code').value!==examples[lastExample]&&!confirm('Replace the code in the editor with this file?'))return;$('code').value=await f.text()}e.target.value=''};
-$('code').onkeydown=e=>{if(e.key==='Tab'){e.preventDefault();const el=e.target,s=el.selectionStart;el.setRangeText('    ',s,el.selectionEnd,'end')}if(e.ctrlKey&&e.key==='Enter'){e.preventDefault();if(! $('run').disabled)$('run').click()}};
+$('code').onkeydown=e=>{
+  const editor=e.target,s=editor.selectionStart,end=editor.selectionEnd;
+  if(e.ctrlKey&&e.key==='Enter'){e.preventDefault();if(!$('run').disabled)$('run').click();return;}
+  if(e.key!=='Enter'&&e.key!=='Tab')return;
+  e.preventDefault();
+  const lineStart=editor.value.lastIndexOf('\n',s-1)+1;
+  if(e.key==='Enter'){
+    const before=editor.value.slice(lineStart,s),indent=(before.match(/^[ \t]*/)||[''])[0];
+    editor.setRangeText('\n'+indent+(/:\s*(?:#.*)?$/.test(before)&&!before.trimStart().startsWith('#')?'    ':''),s,end,'end');
+  }else if(e.shiftKey||s!==end){
+    const last=end>s&&editor.value[end-1]==='\n'?end-1:end;
+    const blockEnd=editor.value.indexOf('\n',last),stop=blockEnd<0?editor.value.length:blockEnd;
+    const lines=editor.value.slice(lineStart,stop).split('\n');
+    const changes=lines.map(line=>e.shiftKey?-(line.match(/^(?: {1,4}|\t)/)||[''])[0].length:4);
+    const replacement=lines.map((line,i)=>e.shiftKey?line.slice(-changes[i]):'    '+line).join('\n');
+    editor.setRangeText(replacement,lineStart,stop,'preserve');
+    editor.setSelectionRange(Math.max(lineStart,s+changes[0]),Math.max(lineStart,end+changes.reduce((a,b)=>a+b,0)));
+  }else editor.setRangeText('    ',s,end,'end');
+  editor.dispatchEvent(new Event('input',{bubbles:true}));
+};
 function joystick(direction,action){const offset={up:[0,-4],down:[0,4],left:[-4,0],right:[4,0],middle:[0,0]}[direction];const pad=document.querySelector('.board-joystick');pad.style.setProperty('--stick-x',(action==='released'?0:offset[0])+'px');pad.style.setProperty('--stick-y',(action==='released'?0:offset[1])+'px');pad.classList.toggle('pressed',action!=='released'&&direction==='middle');$('joystick-status').textContent=`${direction} · ${action}`;worker.postMessage({type:'joystick',direction,action});document.querySelector(`[data-dir="${direction}"]`).classList.toggle('active',action!=='released')}
 document.querySelectorAll('[data-dir]').forEach(b=>{let timer;b.onpointerdown=e=>{e.preventDefault();b.focus();b.setPointerCapture(e.pointerId);joystick(b.dataset.dir,'pressed');timer=setInterval(()=>joystick(b.dataset.dir,'held'),150)};b.onpointerup=b.onpointercancel=()=>{clearInterval(timer);joystick(b.dataset.dir,'released')};b.onkeydown=e=>{const d={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Enter:'middle'}[e.key];if(d){e.preventDefault();joystick(d,e.repeat?'held':'pressed')}};b.onkeyup=e=>{const d={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Enter:'middle'}[e.key];if(d){e.preventDefault();joystick(d,'released')}}});
 boot();

@@ -6,3 +6,5 @@
 .tutorial-strip{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}#progress-tools[hidden]{display:none}#progress-tools{display:flex;gap:5px;align-items:center}#progress-tools button,#progress-tools label{font-size:12px;border-color:transparent}
 #progress-tools .upload{opacity:1;cursor:pointer}
 .decision-guide{display:flex;gap:6px;flex-wrap:wrap;font-size:12px;margin:14px 0}.decision-guide span{padding:6px 9px;background:#152b37;border:1px solid #3b6270;border-radius:6px}.test-cases{list-style:none;padding:0}.test-cases li{padding:8px 10px;margin:5px 0;background:#15232f;border-radius:5px}.test-cases span{display:block;color:#a9ecd6;font-size:12px}
+
+.indent-help{font-size:12px;color:#b5dccc;margin:0;padding:8px 16px;background:#15232f}.mood-preview{display:flex;align-items:center;gap:12px;margin:14px 0}#mood-swatch{display:block;width:72px;height:72px;border:2px solid #7aa99b;border-radius:8px;box-shadow:0 0 14px #ffffff18}

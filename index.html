@@ -1,0 +1,43 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Tutorial_2 · If / Else Decisions · Sense HAT Lab</title><meta name="description" content="Write Python, light up an 8 by 8 LED display, and control a Sense HAT joystick."><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="tutorial.css"></head><body>
+<header><div class="brand"><span class="mark">▦</span><h1><span class="class-name">CPE-1001L · Tutorial_2</span> Sense HAT <b>Lab</b></h1></div><span class="tag">PYTHON PLAYGROUND</span><span id="status" role="status">Loading Python…</span></header>
+<main><section class="editor panel"><div class="bar"><span>main.py</span><div><label class="sr" for="examples">Example program</label><select id="examples"><optgroup label="Python Tutorials"><option value="types">1. Data types &amp; variables</option><option value="input_format">2. Input &amp; print formatting</option><option value="math">3. Math calculations</option><option value="basics">Say hello</option></optgroup><optgroup label="Sensehat Programs"><option value="heart" selected>Pixel heart</option><option value="text">Scrolling text</option><option value="joystick">Move a dot</option><option value="rainbow">Rainbow animation</option></optgroup></select></div></div><div class="actions"><button id="run" class="primary" disabled>▶ Run code</button><button id="stop" disabled>■ Stop</button><button id="download" class="quiet">Save .py</button><label class="upload quiet">Open .py<input id="upload" type="file" accept=".py,.txt" hidden></label></div><div class="code-wrap"><textarea id="code" aria-label="Python code" spellcheck="false" autocapitalize="off"></textarea></div></section>
+<section class="simulation" aria-label="Output, Sense HAT and cheat sheet" tabindex="0"><section class="panel output-panel" aria-label="Program output"><div class="console-head"><span>OUTPUT</span><button id="clear-output" class="quiet">Clear</button></div><pre id="output" role="log" aria-live="polite">Python is loading. The first visit may take a moment.</pre><form id="input-form" hidden><label id="input-prompt" for="input-answer">Program input</label><div><input id="input-answer" autocomplete="off"><button type="submit">Send answer</button></div></form></section><div class="panel display-panel"><div class="bar"><span>Sense HAT</span><span class="muted">8 × 8 LED display</span></div><figure class="photo-board"><div class="board-stage"><img src="sense-hat-board.png" width="1000" height="827" alt="Sense HAT printed circuit board with its connector at the top and physical joystick at the lower right" draggable="false"><div id="matrix" role="img" aria-label="8 by 8 simulated LED display"></div><div class="dpad board-joystick" role="group" aria-label="Joystick"><button data-dir="up" aria-label="Up">↑</button><button data-dir="left" aria-label="Left">←</button><button data-dir="middle" aria-label="Press joystick"><span aria-hidden="true"></span></button><button data-dir="right" aria-label="Right">→</button><button data-dir="down" aria-label="Down">↓</button></div></div><figcaption><div><strong>Joystick</strong><span id="joystick-status" role="status">Ready for input</span></div><p>Click the joystick on the board, or focus it and use the arrow keys and Enter.</p><span id="rotation-label">LED rotation: 0°</span><span class="board-orientation">Top view · connector at top · pixel (0, 0) at top left</span></figcaption></figure><section class="accelerometer" aria-label="Accelerometer controls"><div class="accel-heading"><h2>Accelerometer</h2><button id="reset-accel" class="quiet">Reset</button></div><p>Simulated acceleration in g (units of gravity).<br>Flat and still: X = 0, Y = 0, Z = 1.</p><div id="accel-sliders"></div><p class="accel-hint">Read with <code>sense.get_accelerometer_raw()</code></p></section><div class="display-footer"><span id="pixel-info">Coordinates start at (0, 0), top left</span><button id="clear-led" class="quiet">Clear LEDs</button></div></div>
+<section class="reference panel"><div class="bar"><h2>Sense HAT cheat sheet</h2><span class="muted">Python 3</span></div><p class="cheat-intro">Run the setup once, then try any example below.<br>Colours use [red, green, blue], each from 0 to 255.</p><div class="cheat-list">
+<article><h3>1. Set up your Sense HAT</h3><pre><code>from sense_hat import SenseHat
+sense = SenseHat()</code></pre></article>
+<article><h3>Light one pixel</h3><p>x goes across; y goes down. Both range from 0 to 7.</p><pre><code># Top-left pixel, red
+sense.set_pixel(0, 0, 255, 0, 0)
+# Or use a colour list
+sense.set_pixel(7, 7, [0, 255, 0])</code></pre></article>
+<article><h3>Fill or clear the display</h3><pre><code>sense.clear(0, 0, 255)  # All blue
+sense.clear()           # All off</code></pre></article>
+<article><h3>Show a letter or scroll a message</h3><pre><code>sense.show_letter("A", text_colour=[255, 0, 0])
+sense.show_message("Hello!", scroll_speed=0.1,
+                   text_colour=[0, 255, 0])</code></pre></article>
+<article><h3>Draw an 8 × 8 picture</h3><p>Use 64 colours, one row at a time, starting at the top.</p><pre><code>pixels = [[0, 0, 0] for i in range(64)]
+pixels[0] = [255, 0, 0]   # Top left
+pixels[63] = [0, 255, 0]  # Bottom right
+sense.set_pixels(pixels)</code></pre></article>
+<article><h3>Read a pixel</h3><pre><code>colour = sense.get_pixel(0, 0)
+print(colour)
+pixels = sense.get_pixels()</code></pre></article>
+<article><h3>Rotate or flip</h3><pre><code>sense.set_rotation(90)  # 0, 90, 180, 270
+sense.flip_h()          # Left to right
+sense.flip_v()          # Top to bottom</code></pre></article>
+<article><h3>Pause or dim the LEDs</h3><pre><code>import time
+time.sleep(1)          # Wait one second
+sense.low_light = True # Dim the display</code></pre></article>
+<article><h3>Read the joystick</h3><p>Directions: up, down, left, right, middle.<br>Actions: pressed, held, released. Use Stop to end this loop.</p><pre><code>import time
+while True:
+    for event in sense.stick.get_events():
+        if event.action == "pressed":
+            print(event.direction)
+    time.sleep(0.05)</code></pre></article>
+<article><h3>Wait for a joystick event</h3><pre><code>event = sense.stick.wait_for_event()
+print(event.direction, event.action)</code></pre></article>
+<article><h3>Read acceleration</h3><p>The sliders change X, Y and Z in units of gravity.</p><pre><code>acceleration = sense.get_accelerometer_raw()
+print(acceleration["x"])
+print(acceleration["y"])
+print(acceleration["z"])</code></pre></article></div><details class="compatibility"><summary>Saving, Raspberry Pi & simulator limits</summary><p>Save your work with <strong>Save .py</strong> before leaving. Use the editor to run commands and scripts. Programs finish automatically after their last instruction when no joystick callbacks remain. Input and event waits stay active. Continuous loops need Stop.</p><p>On a Raspberry Pi, open the saved .py file in Python 3. Keep the same Sense HAT import. Hardware projects require a Sense HAT and its official Python library.</p><p>This is an independent teaching simulator. Its font is simplified to uppercase. Hardware, image loading, extra packages, generators, explicit async/await, complex decorators, custom properties and advanced function callbacks are not supported. Accelerometer sliders control raw X, Y and Z readings. Other sensor values remain fixed.</p><a href="https://github.com/astro-pi/python-sense-hat/blob/master/docs/api.md" target="_blank" rel="noreferrer">Official Sense HAT command reference ↗</a></details></section></section></main><footer>Made for experimenting. No Raspberry Pi required.</footer><script src="app.js"></script><script src="lessons.js"></script><script src="tutorial.js"></script></body></html>
+
+

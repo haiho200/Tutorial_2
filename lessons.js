@@ -7,7 +7,6 @@ window.tutorialLessons = [
     "predict": "At exactly 77°F, is temperature > 77 True or False?",
     "starter": "temperature = int(input(\"Temperature in Fahrenheit: \"))\n# Add your if statement below.\nprint(\"Done\")\n",
     "hint": "Use if temperature > 77: followed by an indented print. Do not indent print(\"Done\").",
-    "solution": "temperature = int(input(\"Temperature in Fahrenheit: \"))\nif temperature > 77:\n    print(\"It's hot today!\")\nprint(\"Done\")\n",
     "tests": [
       {
         "inputs": [
@@ -47,7 +46,6 @@ window.tutorialLessons = [
     "predict": "Which branch (path through the code) should run at exactly 77°F?",
     "starter": "temperature = int(input(\"Temperature in Fahrenheit: \"))\n# Write if and else below.\n",
     "hint": "else: has no condition after it. Indent one print statement under each branch.",
-    "solution": "temperature = int(input(\"Temperature in Fahrenheit: \"))\nif temperature > 77:\n    print(\"It's hot today!\")\nelse:\n    print(\"It's not hot today.\")\n",
     "tests": [
       {
         "inputs": [
@@ -95,7 +93,6 @@ window.tutorialLessons = [
     "predict": "At 86°F, which comparison is False and which is True?",
     "starter": "temperature = int(input(\"Temperature in Fahrenheit: \"))\n# Add if, elif, and else in this order.\n",
     "hint": "Start with if temperature > 86:, then elif temperature > 68:, then else:.",
-    "solution": "temperature = int(input(\"Temperature in Fahrenheit: \"))\nif temperature > 86:\n    print(\"It's really hot!\")\nelif temperature > 68:\n    print(\"It's warm.\")\nelse:\n    print(\"It's cold.\")\n",
     "tests": [
       {
         "inputs": [
@@ -143,7 +140,6 @@ window.tutorialLessons = [
     "predict": "How many messages will score 90 print, including Checked?",
     "starter": "score = int(input(\"Score: \"))\n# Write two independent if statements.\nprint(\"Checked\")\n",
     "hint": "Use if twice, not elif. At 90, both conditions are True.",
-    "solution": "score = int(input(\"Score: \"))\nif score > 80:\n    print(\"Great job!\")\nif score > 60:\n    print(\"You passed!\")\nprint(\"Checked\")\n",
     "tests": [
       {
         "inputs": [
@@ -194,7 +190,6 @@ window.tutorialLessons = [
     "predict": "For age 15 with an ID, will Python reach the inside if?",
     "starter": "age = int(input(\"Age: \"))\nhas_id = input(\"Do you have an ID? yes/no: \") == \"yes\"\n# Nest an ID check inside the age check.\n",
     "hint": "Put if has_id: inside if age >= 16:. The ID else is indented four spaces. The age else starts at the left margin.",
-    "solution": "age = int(input(\"Age: \"))\nhas_id = input(\"Do you have an ID? yes/no: \") == \"yes\"\nif age >= 16:\n    if has_id:\n        print(\"You can enter.\")\n    else:\n        print(\"You need an ID.\")\nelse:\n    print(\"You're too young.\")\n",
     "tests": [
       {
         "inputs": [
@@ -245,7 +240,6 @@ window.tutorialLessons = [
     "predict": "If you enter tired, which color should appear? What about excited?",
     "starter": "from sense_hat import SenseHat\nsense = SenseHat()\nmood = input(\"Your mood (happy or tired): \")\n# Write your if/else below.\n",
     "hint": "Use if mood == \"happy\": then sense.clear(0, 255, 0) and print(\"Green mood light\"), both indented. Under else:, use sense.clear(0, 0, 255) and print(\"Blue mood light\").",
-    "solution": "from sense_hat import SenseHat\nsense = SenseHat()\nmood = input(\"Your mood (happy or tired): \")\nif mood == \"happy\":\n    sense.clear(0, 255, 0)\n    print(\"Green mood light\")\nelse:\n    sense.clear(0, 0, 255)\n    print(\"Blue mood light\")\n",
     "tests": [
       {
         "inputs": [
